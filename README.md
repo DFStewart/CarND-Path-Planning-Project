@@ -26,13 +26,13 @@ First I rank each lane based on the number of cars in the lanes and their distan
 2) Finite State Machine (FSM):
 My FSM has 3 states, Keep Lane and Change Lane Left or Right. For each state I compute a cost and then choose the lowest cost state as the state of the vehicle. My costs are based on predictions of collisions, slowdowns from the target speed and costs associated with changing lanes.
 
-For the collisions cost, I extract the other cars in the FSM State's target lane and then extrapolate their trajectory over a fixed time horizon based on their current speed. I also extrapolate our cars position based on the current speed. If any part of the predicted trajectory of our car or the other cars are within a certain threshold then I assign a higher cost. The threshold was hand tuned as well as the gain applied to the cost value.
+2a) For the collisions cost, I extract the other cars in the FSM State's target lane and then extrapolate their trajectory over a fixed time horizon based on their current speed. I also extrapolate our cars position based on the current speed. If any part of the predicted trajectory of our car or the other cars are within a certain threshold then I assign a higher cost. The threshold was hand tuned as well as the gain applied to the cost value.
 
-For the slowdown cost, I apply a gain to the difference between the current speed and the target 50MPH speed limit. This was designed to force us to change lanes if our speed was getting too low. The gain was again tuned by hand.
+2b) For the slowdown cost, I apply a gain to the difference between the current speed and the target 50MPH speed limit. This was designed to force us to change lanes if our speed was getting too low. The gain was again tuned by hand.
 
-For the lane change cost, I set another hand tuned gain so that there was a high cost to changing lanes. I did not want the vehicle constantly changing lanes, it should only change in certain situations.
+2c) For the lane change cost, I set another hand tuned gain so that there was a high cost to changing lanes. I did not want the vehicle constantly changing lanes, it should only change in certain situations.
 
-Once I had computed the costs, I ranked these costs, took the lowest and used the associated FSM state as the desired action. 
+2d) Once I had computed the costs, I ranked these costs, took the lowest and used the associated FSM state as the desired action. 
 
 3) Set Target Lane and Speed
 From this I set a target speed and target lane. For the most part this was setting the target speed to around the speed limit of 50 MPH and setting the target lane to the desired lane. I did have to add some contingencies for cars stopping suddenly (an emergency brake) and allowing lane changes to complete before starting another lane change.
