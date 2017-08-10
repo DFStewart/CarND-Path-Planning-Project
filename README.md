@@ -5,21 +5,46 @@ Self-Driving Car Engineer Nanodegree Program
 
 [//]: # (Image References)
 
-[image1]: ./images/PID_equation.png "PID_EQ"
+[image1]: ./images/Simulator.png "Sim"
 
 # Write Up
 In this project we create a trajectory planner and behavioral planner to safely navigate a car around a test track.
 
 ![alt text][image1]
-![alt text][image2]
 
-##Path Generation
 
 ## Video
-A video of the car successfully navigating the full length of the track can be found below:
+A video of the car successfully navigating the full length of the track (4.23 miles) can be found below:
+
+
+## General Overview
+My implementation was as follows:
+
+1) Lane scoring: 
+First I rank each lane based on the number of cars in the lanes and their distance from my cars current position in "s" Frenet coordinates. The farther away cars are and the less cars in the lane, the higher the rank of the lane. The scores I chose by hand. The result was an estimate of what lane we should target.
+
+2) Finite State Machine (FSM):
+My FSM has 3 states, Keep Lane and Change Lane Left or Right. For each state I compute a cost and then choose the lowest cost state as the state of the vehicle. My costs are based on predictions of collisions, slowdowns from the target speed and costs associated with changing lanes.
+
+For the collisions cost, I extract the other cars in the FSM State's target lane and then extrapolate their trajectory over a fixed time horizon based on their current speed. I also extrapolate our cars position based on the current speed. If any part of the predicted trajectory of our car or the other cars are within a certain threshold then I assign a higher cost. The threshold was hand tuned as well as the gain applied to the cost value.
+
+For the slowdown cost, I apply a gain to the difference between the current speed and the target 50MPH speed limit. This was designed to force us to change lanes if our speed was getting too low. The gain was again tuned by hand.
+
+For the lane change cost, I set another hand tuned gain so that there was a high cost to changing lanes. I did not want the vehicle constantly changing lanes, it should only change in certain situations.
+
+Once I had computed the costs, I ranked these costs, took the lowest and used the associated FSM state as the desired action. 
+
+3) Set Target Lane and Speed
+From this I set a target speed and target lane. For the most part this was setting the target speed to around the speed limit of 50 MPH and setting the target lane to the desired lane. I did have to add some contingencies for cars stopping suddenly (an emergency brake) and allowing lane changes to complete before starting another lane change.
+
+4) Path Generation
+Ther target lane and speed was fed into the path generation logic provided in the Udacity Term 3 Project 1 Walkthrough Youtube video. This path generation logic merges previous and current path using splines and ensures a constant spacing between waypoints sent to the simulator. The target velocity we send is set as a reference and the velocity is slowly incremented or decremented using a fixed acceleration value that was tuned to be below the 10 m/s/s limit. The target lane is converted to a "d" Frenet coordinate and set as a final point in a spline that forms the trajectory. This spline is sampled such that waypoints are evenly spaced.
+
+## Challenges
+The most challenging part of this project was merging the current and previous paths to minimize jerk and acceleration spikes. I spent nearly 3 weeks trying different methods with mixed results. The Udacity Term 3 Project 1 Walkthrough was a fantastic explanation that helped resolve many of those issues.
 
 ## Further Improvements
-The system works most of the time, but lacks robustness. The fixed time horizon we plan trajectories over limits our ability to react quickly to dynamic situations.
+The system works most of the time, but lacks robustness. The fixed time horizon we plan trajectories over limits our ability to react quickly to dynamic situations. Also tuning all the gains by hand is not an efficient method for setting the costs, generating more complex cost functions would be a better solution.
 
 ## Acknowledgements
 This was an extremely difficult project for me, but I am grateful to the Udacity team and my fellow students for their support.
@@ -30,11 +55,7 @@ This was an extremely difficult project for me, but I am grateful to the Udacity
 [3] https://medium.com/@mohankarthik/path-planning-in-highways-for-an-autonomous-vehicle-242b91e6387d
 [4] https://discussions.udacity.com/t/latency-handling/322156/26
 
-
-
-
-
-
+------------------------------------------
    
 ### Simulator. You can download the Term3 Simulator BETA which contains the Path Planning Project from the [releases tab](https://github.com/udacity/self-driving-car-sim/releases).
 
