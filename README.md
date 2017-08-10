@@ -20,10 +20,10 @@ A video of the car successfully navigating the full length of the track (4.23 mi
 ## General Overview
 My implementation was as follows:
 
-1) Lane scoring: 
+1)Lane scoring: 
 First I rank each lane based on the number of cars in the lanes and their distance from my cars current position in "s" Frenet coordinates. The farther away cars are and the less cars in the lane, the higher the rank of the lane. The scores I chose by hand. The result was an estimate of what lane we should target.
 
-2) Finite State Machine (FSM):
+2)Finite State Machine (FSM):
 My FSM has 3 states, Keep Lane and Change Lane Left or Right. For each state I compute a cost and then choose the lowest cost state as the state of the vehicle. My costs are based on predictions of collisions, slowdowns from the target speed and costs associated with changing lanes.
 
 a) For the collisions cost, I extract the other cars in the FSM State's target lane and then extrapolate their trajectory over a fixed time horizon based on their current speed. I also extrapolate our cars position based on the current speed. If any part of the predicted trajectory of our car or the other cars are within a certain threshold then I assign a higher cost. The threshold was hand tuned as well as the gain applied to the cost value.
@@ -37,7 +37,7 @@ d) Once I had computed the costs, I ranked these costs, took the lowest and used
 3) Set Target Lane and Speed
 From this I set a target speed and target lane. For the most part this was setting the target speed to around the speed limit of 50 MPH and setting the target lane to the desired lane. I did have to add some contingencies for cars stopping suddenly (an emergency brake) and allowing lane changes to complete before starting another lane change.
 
-4) Path Generation
+4)Path Generation
 Ther target lane and speed was fed into the path generation logic provided in the Udacity Term 3 Project 1 Walkthrough Youtube video. This path generation logic merges previous and current path using splines and ensures a constant spacing between waypoints sent to the simulator. The target velocity we send is set as a reference and the velocity is slowly incremented or decremented using a fixed acceleration value that was tuned to be below the 10 m/s/s limit. The target lane is converted to a "d" Frenet coordinate and set as a final point in a spline that forms the trajectory. This spline is sampled such that waypoints are evenly spaced.
 
 ## Challenges
