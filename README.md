@@ -15,7 +15,7 @@ In this project we create a trajectory planner and behavioral planner to safely 
 
 ## Video
 A video of the car successfully navigating the full length of the track (4.23 miles) can be found below:
-
+https://youtu.be/7lGOyF1VSpM
 
 ## General Overview
 My implementation was as follows:
