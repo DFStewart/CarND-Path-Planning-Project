@@ -1,5 +1,40 @@
 # CarND-Path-Planning-Project
 Self-Driving Car Engineer Nanodegree Program
+
+---
+
+[//]: # (Image References)
+
+[image1]: ./images/PID_equation.png "PID_EQ"
+
+# Write Up
+In this project we create a trajectory planner and behavioral planner to safely navigate a car around a test track.
+
+![alt text][image1]
+![alt text][image2]
+
+##Path Generation
+
+## Video
+A video of the car successfully navigating the full length of the track can be found below:
+
+## Further Improvements
+The system works most of the time, but lacks robustness. The fixed time horizon we plan trajectories over limits our ability to react quickly to dynamic situations.
+
+## Acknowledgements
+This was an extremely difficult project for me, but I am grateful to the Udacity team and my fellow students for their support.
+
+## References
+[1] Udacity Self Driving Car Forums
+[2] Udacity #pathplanning Slack Channel 
+[3] https://medium.com/@mohankarthik/path-planning-in-highways-for-an-autonomous-vehicle-242b91e6387d
+[4] https://discussions.udacity.com/t/latency-handling/322156/26
+
+
+
+
+
+
    
 ### Simulator. You can download the Term3 Simulator BETA which contains the Path Planning Project from the [releases tab](https://github.com/udacity/self-driving-car-sim/releases).
 
